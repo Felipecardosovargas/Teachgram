@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: teachgram_postgres_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - teachgram-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: teachgram_spring_app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/teachgram_db
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+      APPLICATION_SECURITY_JWT_EXPIRATION_MINUTES: ${APPLICATION_SECURITY_JWT_EXPIRATION_MINUTES}
+    ports:
+      - "8080:8080"
+    networks:
+      - teachgram-network
+    depends_on:
+      db:
+        condition: service_healthy
+
+networks:
+  teachgram-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
