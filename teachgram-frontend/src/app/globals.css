@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+html,
+body {
+  height: 100%;
+}
+#root,
+#__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+:root {
+  --color-primary: #F37671;
+}
+
+.btn {
+  background-color: var(--color-primary);
+}
+
+@media (max-width: 1168px) {
+  .hide-image-on-small {
+    display: none;
+  }
+
+  .auth-content {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none; /* Safari/Chrome */
+  -moz-appearance: none; /* Firefox */
+  appearance: none;
+  width: 1rem;  /* 16px */
+  height: 1rem; /* 16px */
+  border: 2px solid var(--color-primary);
+  border-radius: 0.25rem; /* rounded */
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-primary)80;
+}
